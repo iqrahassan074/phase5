@@ -1,0 +1,1 @@
+📋 Architectural decision detected: Backend Architecture Plan. Document reasoning and tradeoffs? Run `/sp.adr Backend-Architecture-Plan`

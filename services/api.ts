@@ -34,10 +34,18 @@ const MOCK_TASKS: Task[] = [
 ];
 
 export const taskService = {
-  async getTasks(): Promise<Task[]> {
-    // REAL: fetch(BASE_URL)
+  async getTasks(taskId?: string, page: number = 1, limit: number = 10): Promise<Task[]> {
     const stored = localStorage.getItem('taskflow_tasks');
-    return stored ? JSON.parse(stored) : MOCK_TASKS;
+    let tasks: Task[] = stored ? JSON.parse(stored) : MOCK_TASKS;
+
+    if (taskId) {
+      tasks = tasks.filter(task => task.id === taskId);
+    }
+
+    // Apply pagination
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    return tasks.slice(startIndex, endIndex);
   },
 
   async createTask(task: Omit<Task, 'id' | 'createdAt' | 'isCompleted'>): Promise<Task> {

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-api
+  labels:
+    app: chat-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chat-api
+  template:
+    metadata:
+      labels:
+        app: chat-api
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "chat-api"
+        dapr.io/app-port: "8000"
+        dapr.io/sidecar-drop-all-unsupported-features: "true" # Optional, for security
+        dapr.io/config: "appconfig" # Reference to a Dapr Configuration if you have one
+    spec:
+      containers:
+      - name: chat-api
+        image: chat-api # This will be built locally, or from a registry
+        ports:
+        - containerPort: 8000
+        imagePullPolicy: Never # Use Never for local images or IfNotPresent for local cache
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chat-api
+  labels:
+    app: chat-api
+spec:
+  selector:
+    app: chat-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: ClusterIP
