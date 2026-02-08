@@ -1,0 +1,8 @@
+
+{
+  "name": "TaskFlow AI",
+  "description": "A modern, AI-powered conversational todo dashboard designed for event-driven architectures.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
